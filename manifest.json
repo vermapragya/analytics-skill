@@ -1,0 +1,109 @@
+{
+  "name": "analytics-skills",
+  "version": "0.1.0",
+  "description": "Skills library for product data scientists working with Claude. Experiments, cohorting, SQL modeling, regression, causal inference, and readouts.",
+  "license": "MIT",
+  "harness_support": ["claude-code", "cursor"],
+  "stack": ["python", "snowflake", "dbt", "scikit-learn"],
+  "categories": {
+    "experimentation": "A/B test design, analysis, causal inference",
+    "analysis": "Cohort, funnel, segmentation, EDA",
+    "modeling": "Regression and survival analysis",
+    "sql": "Modular SQL, warehouse performance",
+    "data_quality": "Audits and validation",
+    "communication": "Metric specs and stakeholder readouts"
+  },
+  "skills": [
+    {
+      "name": "ab-test-design",
+      "category": "experimentation",
+      "path": "skills/ab-test-design",
+      "description": "Design A/B tests with power analysis, MDE, sample size, and a pre-registration checklist.",
+      "stack": ["python"]
+    },
+    {
+      "name": "ab-test-analysis",
+      "category": "experimentation",
+      "path": "skills/ab-test-analysis",
+      "description": "Analyze A/B test results with significance, confidence intervals, guardrails, and a readout.",
+      "stack": ["python"]
+    },
+    {
+      "name": "cohort-analysis",
+      "category": "analysis",
+      "path": "skills/cohort-analysis",
+      "description": "Build cohort retention tables and curves with one consistent denominator policy.",
+      "stack": ["python", "snowflake"]
+    },
+    {
+      "name": "funnel-analysis",
+      "category": "analysis",
+      "path": "skills/funnel-analysis",
+      "description": "Build a step-by-step funnel with conversion rates and drop-off diagnosis.",
+      "stack": ["python", "snowflake"]
+    },
+    {
+      "name": "metric-definition",
+      "category": "communication",
+      "path": "skills/metric-definition",
+      "description": "Write a metric spec with grain, owner, source, guardrails, and known caveats.",
+      "stack": []
+    },
+    {
+      "name": "modular-sql-ctes",
+      "category": "sql",
+      "path": "skills/modular-sql-ctes",
+      "description": "Refactor SQL into staging / intermediate / fact CTE layers with explicit grain.",
+      "stack": ["snowflake", "dbt"]
+    },
+    {
+      "name": "data-quality-audit",
+      "category": "data_quality",
+      "path": "skills/data-quality-audit",
+      "description": "Run a structured audit on a table: nulls, duplicates, freshness, schema, and PK uniqueness.",
+      "stack": ["snowflake", "python"]
+    },
+    {
+      "name": "logistic-regression",
+      "category": "modeling",
+      "path": "skills/logistic-regression",
+      "description": "Fit, evaluate, and interpret a logistic regression for binary outcomes (churn, conversion).",
+      "stack": ["python", "scikit-learn"]
+    },
+    {
+      "name": "linear-regression",
+      "category": "modeling",
+      "path": "skills/linear-regression",
+      "description": "Fit, evaluate, and interpret a linear regression for continuous outcomes.",
+      "stack": ["python", "scikit-learn"]
+    },
+    {
+      "name": "survival-analysis",
+      "category": "modeling",
+      "path": "skills/survival-analysis",
+      "description": "Run censoring-aware time-to-event analysis with Kaplan-Meier and Cox PH models.",
+      "stack": ["python", "lifelines"]
+    },
+    {
+      "name": "stakeholder-readout",
+      "category": "communication",
+      "path": "skills/stakeholder-readout",
+      "description": "Write a stakeholder-ready readout with TL;DR, evidence, decision, and next steps.",
+      "stack": []
+    },
+    {
+      "name": "warehouse-query-optimization",
+      "category": "sql",
+      "path": "skills/warehouse-query-optimization",
+      "description": "Diagnose slow Snowflake queries (clustering, pruning, joins, spilling) and propose fixes.",
+      "stack": ["snowflake"]
+    },
+    {
+      "name": "causal-inference",
+      "category": "experimentation",
+      "path": "skills/causal-inference",
+      "description": "Estimate causal effects without RCTs using DiD, matching, or IV with a decision framework.",
+      "stack": ["python"]
+    }
+  ]
+}

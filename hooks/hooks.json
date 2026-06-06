@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-hooks.json",
+  "description": "Hooks for analytics-skills. Provides automated nudges for SQL and notebook edits.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.sql$\"",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[analytics-skills] SQL edited — consider invoking agents/sql-reviewer.md or skills/modular-sql-ctes/ for structure review.' >&2"
+          }
+        ]
+      },
+      {
+        "matcher": "tool == \"Edit\" && tool_input.file_path matches \"\\\\.(ipynb|py)$\" && tool_input.new_string matches \"(?i)(p_value|p-value|significance|confidence interval|ab[ _]test)\"",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[analytics-skills] Statistical analysis detected — consider skills/ab-test-analysis/ for review checklist and skills/stakeholder-readout/ for output structure.' >&2"
+          }
+        ]
+      },
+      {
+        "matcher": "tool == \"Write\" && tool_input.file_path matches \"\\\\.sql$\" && tool_input.contents matches \"select \\\\*\"",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[analytics-skills] SELECT * detected — see rules/snowflake-sql-style.md (avoid select * outside staging).' >&2"
+          }
+        ]
+      },
+      {
+        "matcher": "tool == \"Write\" && tool_input.file_path matches \"\\\\.sql$\" && tool_input.contents matches \"\\\\bjoin\\\\b\" && !(tool_input.contents matches \"\\\\b(inner|left|right|full|cross)\\\\s+join\\\\b\")",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[analytics-skills] Bare JOIN keyword detected — always specify join type (inner/left/full). See rules/snowflake-sql-style.md.' >&2"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "tool == \"Bash\" && tool_input.command matches \"\\\\bdbt\\\\s+run\\\\b\"",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '[analytics-skills] dbt run starting — consider /dq-check on outputs after completion.' >&2"
+          }
+        ]
+      }
+    ]
+  }
+}
