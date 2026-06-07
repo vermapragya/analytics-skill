@@ -59,7 +59,14 @@ For lifecycle behavior over weeks/months → `cohort-analysis`. For experiments 
 
    Look for steps where conversion **diverges** between segments. These are the actionable insights.
 
-7. **Write the readout.**
+7. **Generate the three canonical visualizations** using `scripts/visualize_funnel.py`:
+   - **Waterfall chart** — users at each step with cumulative loss overlay (end-to-end view)
+   - **Step-to-step bar chart** — per-transition conversion rate, color-coded by health
+   - **Monthly cohort heatmap** — cohort × step conversion %, to see if the funnel is improving or degrading over time
+
+   When responding inline (no PNG output), produce equivalent markdown tables for each — see `reference.md` for the inline templates.
+
+8. **Write the readout.**
 
 ## Output format
 
@@ -81,6 +88,23 @@ For lifecycle behavior over weeks/months → `cohort-analysis`. For experiments 
 | 3. Email verify | 22,400 | 70.0% | 22.4% | 4.5 min |
 | 4. Profile complete | 16,800 | 75.0% | 16.8% | 2.1 min |
 | 5. First action | 10,080 | 60.0% | 10.1% | 14 min |
+
+## Visualizations
+
+### Waterfall — end-to-end conversion from step 1
+![Waterfall](./charts/waterfall.png)
+
+Bars show users at each step; gray overlays show users lost since the previous step. Headline: 10.1% end-to-end conversion (step 1 → final).
+
+### Step-to-step conversion
+![Step to step](./charts/step_to_step.png)
+
+Each bar is the conversion rate from step N to step N+1 (green ≥80%, amber ≥50%, red <50%). Worst transition flagged in the diagnosis below.
+
+### Monthly cohort heatmap
+![Cohort heatmap](./charts/cohort_heatmap.png)
+
+Rows = signup month, columns = funnel step, cell = % of that cohort reaching the step. Reveals whether the funnel is trending up, flat, or degrading across cohorts.
 
 ## Biggest drop-offs
 1. **Landing → Signup**: -68pp drop (32% conversion). Largest absolute loss.
@@ -129,6 +153,16 @@ For lifecycle behavior over weeks/months → `cohort-analysis`. For experiments 
 ## Scripts
 
 - `scripts/build_funnel.sql` — Snowflake template for strict-ordered funnel with time-bounded steps.
+- `scripts/visualize_funnel.py` — Produces the three canonical PNGs (waterfall, step-to-step, cohort heatmap) from a long-format events CSV.
+
+```bash
+python scripts/visualize_funnel.py \
+    --input events.csv \
+    --steps landing,signup,email_verify,profile_complete,first_action \
+    --output-dir charts/ \
+    --cohort-grain month \
+    --strict
+```
 
 ## Related skills
 

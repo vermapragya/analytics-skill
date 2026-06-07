@@ -25,8 +25,37 @@
 | 4. Profile complete | 16,716 | 75.0% | 16.3% | 2.3 min |
 | 5. First action | 10,030 | 60.0% | 9.8% | 18 min |
 
+## Visualizations
+
+### Waterfall — end-to-end conversion
+| Step | Users | % of step 1 | Lost since prev |
+|---|---|---|---|
+| Landing | 102,400 | 100.0% | — |
+| Signup | 31,840 | 31.1% | −70,560 |
+| Email verify | 22,288 | 21.8% | −9,552 |
+| Profile complete | 16,716 | 16.3% | −5,572 |
+| First action | 10,030 | 9.8% | −6,686 |
+
+### Step-to-step conversion
+| Transition | Step CR | Users lost | Health |
+|---|---|---|---|
+| Landing → Signup | 31.1% | 70,560 | 🔴 red |
+| Signup → Email verify | 70.0% | 9,552 | 🟡 amber |
+| Email verify → Profile complete | 75.0% | 5,572 | 🟡 amber |
+| Profile complete → First action | 60.0% | 6,686 | 🟡 amber |
+
+### Monthly cohort heatmap (% of cohort reaching each step)
+| Cohort (n) | Landing | Signup | Verify | Profile | First action |
+|---|---|---|---|---|---|
+| 2026-01 (n=24,300) | 100% | 33% | 24% | 18% | 11% |
+| 2026-02 (n=27,800) | 100% | 32% | 23% | 17% | 10% |
+| 2026-03 (n=29,100) | 100% | 30% | 21% | 15% |  9% |
+| 2026-04 (n=21,200) | 100% | 28% | 20% | 14% |  8% |
+
+**Trend:** Landing → Signup has dropped from 33% → 28% over 4 cohorts (−5pp). Every downstream step is also degrading roughly proportionally — suggests the issue is upstream at signup, not in later steps.
+
 ## Biggest drop-offs
-1. Landing → Signup: -68.9pp (largest absolute)
+1. Landing → Signup: -68.9pp (largest absolute) **and degrading over time** (see cohort heatmap)
 2. Profile → First action: -40pp + 18 min median (suggests post-onboarding friction)
 
 ## Segment breakdowns: mobile vs desktop

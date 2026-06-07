@@ -77,14 +77,94 @@ Is the drop-off concentrated in a segment?
     │   └── Yes → UX/design fix
 ```
 
-## Funnel chart conventions
+## Canonical visualizations
 
-- **Bar chart**: each bar = step. Width or height = users. Most readable.
-- **Sankey diagram**: shows where users go after dropping off. Useful for non-strict funnels with multiple paths.
-- **Step CR labels above bars**: shows the step-to-step rate (the actionable number).
-- **End-to-end CR in title**: gives the headline.
+Every funnel readout should include these three charts. Generate them with `scripts/visualize_funnel.py`. When responding inline (chat-only, no images), produce the markdown-table fallbacks shown below.
 
-Avoid the literal "funnel" trapezoid shape — it's harder to read than a bar chart and the visual width adds no information.
+### 1. Waterfall — end-to-end conversion from step 1
+
+**What it shows:** users remaining at each step (solid bar) plus the cumulative loss since the previous step (gray overlay). Reads top-down through the funnel and makes the absolute size of each drop-off obvious.
+
+**Conventions:**
+- Headline metric in title: end-to-end CR + absolute counts (`step 1: N → final: M`).
+- Each bar annotated with `count` and `% of step 1`.
+- Gray overlay annotated with `−lost` (the absolute users lost since the previous step).
+- Y-axis = users (linear). Do **not** start at zero only if you also annotate the truncation.
+
+**Inline markdown fallback (when you can't render a PNG):**
+
+```markdown
+### Waterfall (step 1 → each step)
+| Step | Users | % of step 1 | Lost since prev |
+|---|---|---|---|
+| Landing | 100,000 | 100.0% | — |
+| Signup | 32,000 | 32.0% | −68,000 |
+| Email verify | 22,400 | 22.4% | −9,600 |
+| Profile complete | 16,800 | 16.8% | −5,600 |
+| First action | 10,080 | 10.1% | −6,720 |
+```
+
+### 2. Step-to-step conversion
+
+**What it shows:** the per-transition conversion rate (step N → step N+1). This is the *marginal* rate — what the waterfall hides because it's compounded. The worst transition is your biggest leverage point.
+
+**Conventions:**
+- Horizontal bar chart, one bar per transition.
+- Color thresholds: green ≥ 80%, amber ≥ 50%, red < 50%.
+- Label each bar with both the rate and the absolute users lost.
+- Sort in funnel order (not by rate) — preserves the flow.
+
+**Inline markdown fallback:**
+
+```markdown
+### Step-to-step conversion
+| Transition | Step CR | Users lost | Health |
+|---|---|---|---|
+| Landing → Signup | 32.0% | 68,000 | 🔴 red |
+| Signup → Email verify | 70.0% | 9,600 | 🟡 amber |
+| Email verify → Profile complete | 75.0% | 5,600 | 🟡 amber |
+| Profile complete → First action | 60.0% | 6,720 | 🟡 amber |
+```
+
+(If emoji aren't desired, use plain text: `low / medium / high`.)
+
+### 3. Monthly cohort heatmap
+
+**What it shows:** rows = cohort (signup month), columns = funnel step, cell = % of that cohort that reached the step. Reveals whether the funnel is **improving, flat, or degrading over time** — something the static funnel can't tell you.
+
+**Conventions:**
+- Cohort definition = month of step-1 event (consistent across rows).
+- Cell value = end-to-end CR (% of cohort reaching that step), not step CR. End-to-end is comparable across columns; step CR is not.
+- Row label includes cohort size `n=…` so reader can spot small/noisy cohorts.
+- Sequential color scale (light → dark) keyed to 0–100%.
+- Annotate every cell with the % (no hover required).
+- Sort cohorts chronologically (oldest at top).
+
+**How to read it:**
+- Reading **down a column** shows trend over time at that step. A column going lighter = degradation.
+- Reading **across a row** shows the funnel shape for one cohort.
+- A diagonal pattern (later cohorts lighter at later steps) = a leak introduced recently.
+
+**Inline markdown fallback:**
+
+```markdown
+### Cohort heatmap (% of cohort reaching each step)
+| Cohort (n) | Landing | Signup | Verify | Profile | First action |
+|---|---|---|---|---|---|
+| 2025-12 (n=24,300) | 100% | 33% | 24% | 18% | 11% |
+| 2026-01 (n=27,800) | 100% | 32% | 23% | 17% | 10% |
+| 2026-02 (n=29,100) | 100% | 30% | 21% | 15% |  9% |
+| 2026-03 (n=18,800) | 100% | 28% | 20% | 14% |  8% |
+```
+
+Then call out the trend in prose (e.g. "Signup CR has dropped 5pp over 4 cohorts — investigate the landing page changes shipped in late January.").
+
+### Other useful but optional visualizations
+
+- **Sankey diagram**: shows where users *go* after dropping off (e.g. did they bounce, or do a different action?). Most useful for non-strict funnels with multiple downstream paths.
+- **Time-to-convert histogram**: distribution of step N → N+1 latency. Useful when a step is gated by an external action (email, payment).
+
+Avoid the literal "funnel" trapezoid — it's harder to read than a bar chart and the visual width carries no information beyond the count.
 
 ## Snowflake template
 
