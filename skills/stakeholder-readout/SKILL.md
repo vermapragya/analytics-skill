@@ -56,6 +56,8 @@ Every readout has exactly five sections, in this order:
 
 5. **End with next steps** — concrete, owned, time-bound.
 
+6. **Run the conclusions audit before publishing.** Every readout passes the three checks below (see "Conclusions audit") — claims↔evidence traceability, causation language, and cherry-picking. A readout that fails any check doesn't ship until fixed.
+
 ## Output format
 
 ```markdown
@@ -129,6 +131,65 @@ Every readout has exactly five sections, in this order:
 <Optional: methodology details, charts, secondary findings — only for those who want the depth>
 ```
 
+## Conclusions audit
+
+Run this on the finished draft, before it ships. Audit the narrative as a skeptical reviewer would — the goal is that no claim in the readout can be embarrassed by someone reading the appendix.
+
+### Check 1: Every claim is supported by evidence
+
+Walk the narrative claim by claim. For each declarative statement, ask: **which number, chart, or test in this readout backs it?**
+
+- Every claim in the TL;DR, findings, and decision must trace to specific evidence *in the document* (or its appendix) — not to "we know" or "it's well understood."
+- The strength of the language must match the strength of the evidence:
+
+| Evidence | Allowed language |
+|---|---|
+| Significant, pre-registered result | "X increased Y by 8%" |
+| Directional but not significant | "X appears to increase Y (not yet conclusive)" |
+| Single segment / small N | "In <segment>, we observed…" (never generalize to all users) |
+| No supporting data in the doc | Delete the claim or add the evidence |
+
+- Watch for **smuggled claims**: causal or quantitative statements hiding in transitions ("because users were confused, retention fell") — that "because" needs evidence too.
+
+### Check 2: Causation language matches the study design
+
+Causal verbs — *caused, drove, increased, reduced, led to, because of* — are earned by design, not by effect size.
+
+| Design | Language allowed |
+|---|---|
+| Randomized experiment (clean) | "The change **increased** conversion by 8%" |
+| Quasi-experiment (DiD, matching, IV) | "The change is **associated with** +8%; causal under <stated assumptions>" |
+| Observational / correlational | "Users who did X converted more — **selection effects likely**; we cannot say X causes conversion" |
+| Pre/post with no control | "Conversion rose after launch — **other factors changed too**; not attributable" |
+
+- Scrub the TL;DR hardest: it's the most-quoted sentence and the most likely place an "is associated with" silently becomes "drove."
+- If the recommendation requires a causal claim the design can't support, say so explicitly and route to `ab-test-design` or `causal-inference` as a next step.
+
+### Check 3: No cherry-picking
+
+The narrative must survive contact with everything you looked at, not just what made the slide.
+
+- **Metrics:** were any metrics checked but omitted because they were flat or negative? Report them — one line each is enough ("Guardrails: latency, churn, support tickets — all flat").
+- **Time windows:** does the conclusion hold on the natural window (full quarter, all weeks), or only the window shown? If the window was chosen after seeing data, disclose it.
+- **Segments:** is the headline a whole-population effect, or did one segment carry it? Report the segment composition; never present a subgroup win as a global win.
+- **Multiple comparisons:** if 20 segments/metrics were tested, ~1 will look significant by chance. State how many things were tested; treat unplanned subgroup findings as hypotheses, not conclusions.
+- **Outliers & exclusions:** any rows/users excluded? State the rule, the count, and whether the conclusion holds with them included.
+
+**The two-question gut check:**
+1. "If a skeptic saw *everything* I looked at, would they accept this narrative?"
+2. "Did I decide the story before or after I saw this evidence?" — if before, the omitted evidence gets extra scrutiny.
+
+### Audit output
+
+Append a short audit trail to the readout (or appendix) so reviewers can verify the audit ran:
+
+```markdown
+## Conclusions audit
+- Claims↔evidence: all N claims traced to evidence (claim 3 softened: directional, not significant)
+- Causation language: observational design — all causal verbs replaced with "associated with"
+- Cherry-picking: 6 metrics examined, 2 flat (reported in appendix); no post-hoc window changes; headline effect holds with outliers included
+```
+
 ## Validation checks
 
 - [ ] TL;DR is ONE sentence
@@ -139,6 +200,9 @@ Every readout has exactly five sections, in this order:
 - [ ] Caveats include the worst-case "this could be wrong because…"
 - [ ] Length appropriate for audience (exec = 1 page; team = up to 3 pages)
 - [ ] No statistical jargon without translation (p-value → "very strong evidence")
+- [ ] **Conclusions audit ran**: every claim traced to evidence in the doc
+- [ ] **Causation language** matches the study design (causal verbs only for experiments)
+- [ ] **No cherry-picking**: flat/negative metrics reported; windows and exclusions disclosed; subgroup wins not presented as global
 
 ## Edge cases & failure modes
 

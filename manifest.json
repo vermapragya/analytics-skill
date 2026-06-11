@@ -99,6 +99,20 @@
       "stack": ["snowflake"]
     },
     {
+      "name": "sql-query-review",
+      "category": "sql",
+      "path": "skills/sql-query-review",
+      "description": "Static review of a SQL query: anti-patterns, structure, and an optimized rewrite with verification plan.",
+      "stack": ["snowflake", "python"]
+    },
+    {
+      "name": "sql-correctness-review",
+      "category": "sql",
+      "path": "skills/sql-correctness-review",
+      "description": "Audit query logic for wrong results: duplicates, join fanout, wrong join types, NULL traps, CASE issues.",
+      "stack": ["snowflake"]
+    },
+    {
       "name": "causal-inference",
       "category": "experimentation",
       "path": "skills/causal-inference",

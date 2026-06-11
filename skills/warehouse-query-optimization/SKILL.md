@@ -156,6 +156,8 @@ where query_id = '<id>';
 
 ## Related skills
 
+- `sql-query-review` — static review when no runtime profile is available
+- `sql-correctness-review` — verify the query is *right* before making it fast
 - `modular-sql-ctes` — well-structured SQL is also faster SQL
 - `data-quality-audit` — sometimes "slow" is "scanning too much because the table has dupes"
 - `metric-definition` — pre-aggregating into a metric layer often beats optimizing ad-hoc queries

@@ -24,7 +24,7 @@ Most "analytics templates" are either generic markdown checklists or one-off not
 
 ```
 analytics-skills/
-├── skills/                  # Primary surface — 13 day-to-day DS skills
+├── skills/                  # Primary surface — 15 day-to-day DS skills
 ├── agents/                  # Specialized reviewers (experiment, SQL, readout)
 ├── commands/                # Slash commands for fast invocation
 ├── rules/                   # Always-follow style guides
@@ -37,7 +37,7 @@ analytics-skills/
 
 ---
 
-## The 13 MVP skills
+## The 15 skills
 
 | Skill | What it does | When Claude uses it |
 |---|---|---|
@@ -53,6 +53,8 @@ analytics-skills/
 | `survival-analysis` | Time-to-event with censoring | "Model time-to-churn…" |
 | `stakeholder-readout` | Insight write-up structure | "Write a readout for…" |
 | `warehouse-query-optimization` | Snowflake-specific perf tuning | "This query is slow on Snowflake…" |
+| `sql-query-review` | Static anti-pattern check + optimized rewrite | "Review/optimize this query…" |
+| `sql-correctness-review` | Logic audit: dupes, fanout, joins, NULLs, CASE | "These numbers look wrong…" |
 | `causal-inference` | DiD, matching, IV decision framework | "Estimate causal impact of…" |
 
 ---
